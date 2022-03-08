@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "poetry-generation"
+version = "0.1.0"
+description = ""
+authors = ["br <bartosz.roguski@4soft.co>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "^1.4.1"
+jsonlines = "^3.0.0"
+tqdm = "^4.63.0"
+torch = "^1.10.2"
+fire = "^0.4.0"
+mlflow = "^1.24.0"
+logzero = "^1.7.0"
+rich = "^11.2.0"
+hydra-core = "^1.1.1"
+boto3 = "^1.21.14"
+pytorch-lightning = "^1.5.10"
+dvc = "^2.9.5"
+
+[tool.poetry.dependencies.transformers]
+git = 'ssh://git@gitlab.4soft.tech/nlp-research/transformers.git'
+extras = ['iambot', 'tokenizers', 'pytorch']
+
+[tool.poetry.dev-dependencies]
+black = "^22.1.0"
+mypy = "^0.931"
+isort = "^5.10.1"
+ipdb = "^0.13.9"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 100
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.githooks]
+pre-commit = "poe fix"
+
+[tool.vulture]
+min_confidence = 90
+sort_by_size = true
+
+[tool.poe.tasks]
+autoflake = "autoflake --in-place --remove-unused-variables --remove-duplicate-keys --ignore-init-module-imports --remove-all-unused-imports --recursive ."
+black = "black ./"
+isort = "isort . -c"
+fix = ["autoflake", "black", "isort"]
