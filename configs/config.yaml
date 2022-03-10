@@ -7,6 +7,7 @@ defaults:
     - datamodule: stanza
     - mode: default
     - hparams_search: null
+    - experiment: null
 
     # enable color logging
     - override hydra/hydra_logging: colorlog
@@ -32,7 +33,7 @@ ignore_warnings: True
 test_after_training: True
 
 # seed for random number generators in pytorch, numpy and python.random
-seed: null
+seed: 666
 
 # name of the run is accessed by loggers
 # should be used along with experiment mode

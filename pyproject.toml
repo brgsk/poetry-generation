@@ -20,6 +20,7 @@ pytorch-lightning = "^1.5.10"
 dvc = "^2.9.5"
 bs4 = "^0.0.1"
 hydra-colorlog = "^1.1.0"
+sentencepiece = "^0.1.96"
 
 [tool.poetry.dependencies.transformers]
 git = 'ssh://git@gitlab.4soft.tech/nlp-research/transformers.git'
