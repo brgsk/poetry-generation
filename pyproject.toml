@@ -18,6 +18,8 @@ hydra-core = "^1.1.1"
 boto3 = "^1.21.14"
 pytorch-lightning = "^1.5.10"
 dvc = "^2.9.5"
+bs4 = "^0.0.1"
+hydra-colorlog = "^1.1.0"
 
 [tool.poetry.dependencies.transformers]
 git = 'ssh://git@gitlab.4soft.tech/nlp-research/transformers.git'
@@ -39,14 +41,41 @@ line-length = 100
 max-line-length = 100
 
 [tool.githooks]
-pre-commit = "poe fix"
+pre-commit = "poe format"
 
 [tool.vulture]
 min_confidence = 90
 sort_by_size = true
 
 [tool.poe.tasks]
-autoflake = "autoflake --in-place --remove-unused-variables --remove-duplicate-keys --ignore-init-module-imports --remove-all-unused-imports --recursive ."
-black = "black ./"
-isort = "isort . -c"
-fix = ["autoflake", "black", "isort"]
+[tool.poe.tasks.mine]
+help = "Download poems"
+script = "src.utils.poemsminer:fire_mine"
+
+[tool.poe.tasks.process-data]
+help = "Process poems and store them as .csv files"
+script = "src.utils.utils:fire_process"
+
+[tool.poe.tasks.autoflake]
+help = "Lint code with autoflake"
+cmd = """
+	autoflake
+		--in-place
+		--remove-unused-variables
+		--remove-duplicate-keys
+		--ignore-init-module-imports
+		--remove-all-unused-imports
+		--recursive .
+	"""
+[tool.poe.tasks.isort]
+help = "Sort imports"
+cmd = "isort . -c"
+
+[tool.poe.tasks.black]
+help = "Format code with black"
+cmd = "black ."
+
+[tool.poe.tasks.format]
+help = "Run sequence of code-formatting operations"
+sequence = ["black", "autoflake", "isort"]
+ignore_fail = "return_zero"

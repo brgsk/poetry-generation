@@ -4,7 +4,7 @@ defaults:
     - _self_
     - trainer: default
     - model: default
-    - datamodule: default
+    - datamodule: stanza
     - mode: default
     - hparams_search: null
 
@@ -19,7 +19,7 @@ defaults:
 work_dir: ${hydra:runtime.cwd}
 
 # path to folder with data
-data_dir: ${work_dir}/res/
+data_dir: ${work_dir}/res/data/
 
 # pretty print config at the start of the run using Rich library
 print_config: True
