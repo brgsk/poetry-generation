@@ -19,7 +19,7 @@ defaults:
 work_dir: ${hydra:runtime.cwd}
 
 # path to folder with data
-data_dir: ${work_dir}/res/data/
+res_dir: ${work_dir}/res/
 
 # pretty print config at the start of the run using Rich library
 print_config: True

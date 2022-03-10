@@ -1,6 +1,6 @@
 _target_: src.datamodules.stanza_datamodule.StanzaDataModule
 
-data_dir: ${data_dir} # data_dir is specified in config.yaml
+res_dir: ${res_dir} # data_dir is specified in config.yaml
 batch_size: 32
 train_val_ratio: 0.8
 num_workers: 4

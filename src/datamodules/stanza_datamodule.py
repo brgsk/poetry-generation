@@ -12,12 +12,12 @@ from src.utils.utils import train_val_split
 
 class StanzaDataModule(LightningDataModule):
     """
-    Lightning's DataModule for poems' stanzas.
+    Lightning's DataModule for poems stored as stanzas.
     """
 
     def __init__(
         self,
-        data_dir: str = "res/data",
+        res_dir: str = "res/",
         batch_size: int = 32,
         train_val_ratio: float = 0.8,
         num_workers: int = 4,
@@ -33,13 +33,19 @@ class StanzaDataModule(LightningDataModule):
         tokenizer = GPT2Tokenizer.from_pretrained("dkleczek/papuGaPT2", use_fast=False)
         special_tokens_dict = {"bos_token": "<BOS>", "eos_token": "<EOS>", "pad_token": "<PAD>"}
         num_added_tokens = tokenizer.add_special_tokens(special_tokens_dict)
-        tokenizer.save_pretrained(Path(self.hparams.data_dir).parent + "/tokenizer")
+        tokenizer.save_pretrained(Path(self.hparams.res_dir, "tokenizer"))
 
     def setup(self, stage: Optional[str] = None) -> None:
-        tokenizer = GPT2Tokenizer.from_pretrained(Path(self.hparams.data_dir).parent + "/tokenizer")
+        tokenizer = GPT2Tokenizer.from_pretrained(Path(self.hparams.res_dir, "/tokenizer"))
 
-        stanza_df = pd.read_csv(self.hparams.data_dir + "stanzas.csv")
-        stanza_df.fillna("")
+        stanza_df = pd.read_csv(self.hparams.res_dir / "data/stanzas.csv")
+        stanza_df = stanza_df.fillna("")
+        stanza_df = (
+            stanza_df.groupby(["title"])["stanza_text"]
+            .transform(lambda x: " /n/n ".join(x))
+            .drop_duplicates()
+            .reset_index(drop=True)
+        )
 
         stanza_ds = StanzaDataset(data_df=stanza_df, tokenizer=self.tokenizer)
         train_size, val_size = train_val_split(self.hparams.train_val_ratio, stanza_ds)
