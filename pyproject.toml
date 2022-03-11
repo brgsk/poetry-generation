@@ -51,6 +51,10 @@ min_confidence = 90
 sort_by_size = true
 
 [tool.poe.tasks]
+[tool.poe.tasks.run]
+help = "Run training"
+script = "run:main"
+
 [tool.poe.tasks.mine]
 help = "Download poems"
 script = "src.utils.poem_miner:fire_mine"
