@@ -3,7 +3,7 @@ from typing import Optional
 
 import pandas as pd
 from pytorch_lightning import LightningDataModule
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, random_split
 from transformers import GPT2Tokenizer
 
 from src.datamodules.datasets.stanza_dataset import StanzaDataset
@@ -25,27 +25,17 @@ class StanzaDataModule(LightningDataModule):
     ) -> None:
         super().__init__()
 
+        tokenizer_dir = Path(res_dir, "tokenizer")
+        self.tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_dir)
+
         # this line allows to access init params with 'self.hparams' attribute
         # it also ensures init params will be stored in ckpt
         self.save_hyperparameters(logger=False)
 
-    def prepare_data(self) -> None:
-        tokenizer = GPT2Tokenizer.from_pretrained("dkleczek/papuGaPT2", use_fast=False)
-        special_tokens_dict = {"bos_token": "<BOS>", "eos_token": "<EOS>", "pad_token": "<PAD>"}
-        num_added_tokens = tokenizer.add_special_tokens(special_tokens_dict)
-        tokenizer.save_pretrained(Path(self.hparams.res_dir, "tokenizer"))
-
     def setup(self, stage: Optional[str] = None) -> None:
-        tokenizer = GPT2Tokenizer.from_pretrained(Path(self.hparams.res_dir, "/tokenizer"))
 
-        stanza_df = pd.read_csv(self.hparams.res_dir / "data/stanzas.csv")
+        stanza_df = pd.read_csv(Path(self.hparams.res_dir) / "data" / "stanzas.csv")
         stanza_df = stanza_df.fillna("")
-        stanza_df = (
-            stanza_df.groupby(["title"])["stanza_text"]
-            .transform(lambda x: " /n/n ".join(x))
-            .drop_duplicates()
-            .reset_index(drop=True)
-        )
 
         stanza_ds = StanzaDataset(data_df=stanza_df, tokenizer=self.tokenizer)
         train_size, val_size = train_val_split(self.hparams.train_val_ratio, stanza_ds)
@@ -53,13 +43,12 @@ class StanzaDataModule(LightningDataModule):
         self.train_ds, self.val_ds = random_split(stanza_ds, [train_size, val_size])
 
     def train_dataloader(self) -> DataLoader:
-        pass
         return DataLoader(
             self.train_ds,
             batch_size=self.hparams.batch_size,
             num_workers=self.hparams.num_workers,
             pin_memory=self.hparams.pin_memory,
-            shuffle=True,
+            sampler=RandomSampler(self.train_ds),
         )
 
     def val_dataloader(self) -> DataLoader:
@@ -68,7 +57,7 @@ class StanzaDataModule(LightningDataModule):
             batch_size=self.hparams.batch_size,
             num_workers=self.hparams.num_workers,
             pin_memory=self.hparams.pin_memory,
-            shuffle=True,
+            sampler=SequentialSampler(self.val_ds),
         )
 
     def test_dataloader(self) -> DataLoader:

@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List, Optional
 
 import hydra
@@ -10,6 +11,7 @@ from pytorch_lightning import (
     seed_everything,
 )
 from pytorch_lightning.loggers import LightningLoggerBase
+from transformers import GPT2Tokenizer
 
 from src.utils import utils
 
@@ -30,6 +32,18 @@ def train(config: DictConfig) -> Optional[float]:
     # Set seed for random number generators in pytorch, numpy and python.random
     if config.get("seed"):
         seed_everything(config.seed, workers=True)
+
+    res_dir = Path(config.res_dir)
+
+    if not (res_dir / "tokenizer").exists():
+        utils.prepare_tokenizer(
+            tokenizer_hf_name=config.model.pretrained_name_or_path, save_dir=config.res_dir
+        )
+        tokenizer = GPT2Tokenizer.from_pretrained(res_dir / "tokenizer")
+    else:
+        tokenizer = GPT2Tokenizer.from_pretrained(res_dir / "tokenizer")
+
+    config.model.vocab_size = len(tokenizer)
 
     # Init lightning datamodule
     log.info(f"Instantiating datamodule <{config.datamodule._target_}>")

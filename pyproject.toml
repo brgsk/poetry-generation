@@ -21,6 +21,7 @@ dvc = "^2.9.5"
 bs4 = "^0.0.1"
 hydra-colorlog = "^1.1.0"
 sentencepiece = "^0.1.96"
+autoflake = "^1.4"
 
 [tool.poetry.dependencies.transformers]
 git = 'ssh://git@gitlab.4soft.tech/nlp-research/transformers.git'
@@ -31,6 +32,7 @@ black = "^22.1.0"
 mypy = "^0.931"
 isort = "^5.10.1"
 ipdb = "^0.13.9"
+poethepoet = "^0.13.1"
 
 [tool.isort]
 profile = "black"
@@ -51,11 +53,11 @@ sort_by_size = true
 [tool.poe.tasks]
 [tool.poe.tasks.mine]
 help = "Download poems"
-script = "src.utils.poemsminer:fire_mine"
+script = "src.utils.poem_miner:fire_mine"
 
-[tool.poe.tasks.process-data]
+[tool.poe.tasks.process]
 help = "Process poems and store them as .csv files"
-script = "src.utils.utils:fire_process"
+script = "src.utils.poem_processor:fire_process"
 
 [tool.poe.tasks.autoflake]
 help = "Lint code with autoflake"

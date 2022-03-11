@@ -1,13 +1,11 @@
 from collections import defaultdict
 from pathlib import Path
 
-import hydra
 import jsonlines
 import requests
 from bs4 import BeautifulSoup
 from fire import Fire
 from logzero import logger
-from omegaconf import DictConfig
 from rich.console import Console
 from rich.progress import track
 

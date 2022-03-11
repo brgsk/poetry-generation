@@ -3,11 +3,15 @@
 defaults:
     - _self_
     - trainer: default
-    - model: default
+    - model: poet
     - datamodule: stanza
+    - callbacks: default
+    - logger: mlflow # set logger here or use command line (e.g. `python run.py logger=wandb`)
+
     - mode: default
-    - hparams_search: null
+
     - experiment: null
+    - hparams_search: null
 
     # enable color logging
     - override hydra/hydra_logging: colorlog

@@ -1,12 +1,7 @@
-from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any
 
-import pandas as pd
-import torch
 from pytorch_lightning import LightningModule
 from torch.optim import AdamW, Optimizer
-from torchmetrics import MaxMetric
-from torchmetrics.classification.accuracy import Accuracy
 from transformers import GPT2Config, GPT2LMHeadModel, get_linear_schedule_with_warmup
 
 
@@ -16,7 +11,12 @@ class PoetLightningModel(LightningModule):
     """
 
     def __init__(
-        self, vocab_size: int, n_positions: int, pretrained_name_or_path: str, lr: float = 1e-4
+        self,
+        warmup_steps: int,
+        vocab_size: int,
+        n_positions: int,
+        pretrained_name_or_path: str,
+        lr: float = 1e-4,
     ) -> None:
         super().__init__()
 
@@ -37,7 +37,7 @@ class PoetLightningModel(LightningModule):
         labels = batch[0]
         masks = batch[1]
 
-        outputs = self.model(input_ids, labels, masks)
+        outputs = self.model(input_ids, labels=labels, attention_mask=masks, token_type_ids=None)
 
         loss = outputs[0]
 
@@ -54,9 +54,11 @@ class PoetLightningModel(LightningModule):
         self.log("val/loss", loss.item(), on_step=False, on_epoch=True)
 
     def configure_optimizers(self) -> Optimizer:
-        optimizer = AdamW(parameters=self.model.parameters(), lr=self.hparams.lr)
+        optimizer = AdamW(params=self.model.parameters(), lr=self.hparams.lr)
         scheduler = get_linear_schedule_with_warmup(
-            optimizer, num_training_steps=self.num_training_steps
+            optimizer,
+            num_warmup_steps=self.hparams.warmup_steps,
+            num_training_steps=self.num_training_steps,
         )
 
         scheduler_config = {"scheduler": scheduler, "interval": "step", "frequency": 1}

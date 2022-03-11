@@ -1,8 +1,6 @@
-from pathlib import Path
-
 import pandas as pd
 import torch
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch.utils.data import Dataset
 
 # from transformers import GPT2Config, GPT2LMHeadModel, GPT2Tokenizer
 from transformers import PreTrainedTokenizer
@@ -21,7 +19,7 @@ class StanzaDataset(Dataset):
         self.attn_masks = []
 
         for i in data_df["stanza_text"].values:
-            encodings_dict = tokenizer(
+            encodings_dict = self.tokenizer(
                 "<BOS>" + i + "<EOS>", truncation=True, max_length=max_length, padding="max_length"
             )
 
