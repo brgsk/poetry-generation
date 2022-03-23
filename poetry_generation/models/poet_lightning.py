@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Any
 
 from pytorch_lightning import LightningModule
@@ -64,6 +65,7 @@ class PoetLightningModel(LightningModule):
         scheduler_config = {"scheduler": scheduler, "interval": "step", "frequency": 1}
         return {"optimizer": optimizer, "lr_scheduler": scheduler_config}
 
+    @lru_cache
     @property
     def num_training_steps(self) -> int:
         """Total training steps inferred from datamodule and devices."""

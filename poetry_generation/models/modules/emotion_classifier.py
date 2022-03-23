@@ -1,50 +1,24 @@
-from typing import List, Optional
-
-import torch
-import torch.nn.functional as F
 from torch import nn
-from transformers import (
-    AutoModelWithLMHead,
-    AutoTokenizer,
-    PretrainedConfig,
-    PreTrainedModel,
-    PreTrainedTokenizer,
+from transformers import AutoModel, PreTrainedModel
+
+from poetry_generation.models.modules.emotion_classification_head import (
+    EmotionClassificationHead,
 )
-
-
-class EmotionClassificationHead(nn.Module):
-    """Head for emotion classification task."""
-
-    def __init__(self, hidden_size: int, dropout: float, num_labels: int):
-        super().__init__()
-        self.dense = nn.Linear(hidden_size, hidden_size)
-        self.dropout = nn.Dropout(dropout)
-        self.out_proj = nn.Linear(hidden_size, num_labels)
-
-    def forward(self, features, **kwargs):
-        x = features[:, 0, :]
-        x = self.dropout(x)
-        x = self.dense(x)
-        x = torch.tanh(x)
-        x = self.dropout(x)
-        x = self.out_proj(x)
-        return x
 
 
 class RobertaEmpathModel(nn.Module):
     def __init__(
         self,
-        base_model: PreTrainedModel,
-        n_classes: int,
+        model_name_or_path: PreTrainedModel,
+        n_classes: int = 3,
     ):
         super().__init__()
-        self.roberta = base_model
+        self.roberta = AutoModel.from_pretrained(model_name_or_path)
         self.classifier = EmotionClassificationHead(
-            hidden_size=base_model.config.hidden_size,
-            dropout=base_model.config.hidden_dropout_prob,
+            hidden_size=self.roberta.config.hidden_size,
+            dropout=self.roberta.config.hidden_dropout_prob,
             num_labels=n_classes,
         )
-        pass
 
     def forward(
         self,

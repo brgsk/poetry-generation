@@ -11,9 +11,8 @@ from pytorch_lightning import (
     seed_everything,
 )
 from pytorch_lightning.loggers import LightningLoggerBase
-from transformers import GPT2Tokenizer
-
 from src.utils import utils
+from transformers import GPT2Tokenizer
 
 log = utils.get_logger(__name__)
 

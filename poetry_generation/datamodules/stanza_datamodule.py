@@ -3,11 +3,10 @@ from typing import Optional
 
 import pandas as pd
 from pytorch_lightning import LightningDataModule
-from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, random_split
-from transformers import GPT2Tokenizer
-
 from src.datamodules.datasets.stanza_dataset import StanzaDataset
 from src.utils.utils import train_val_split
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, random_split
+from transformers import GPT2Tokenizer
 
 
 class StanzaDataModule(LightningDataModule):

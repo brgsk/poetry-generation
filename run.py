@@ -1,7 +1,5 @@
-# import dotenv
 import hydra
 from omegaconf import DictConfig
-
 from src.train import train
 from src.utils import utils
 
