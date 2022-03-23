@@ -12,14 +12,14 @@ from transformers import (
 )
 
 
-class EmapthyClassificationHead(nn.Module):
+class EmotionClassificationHead(nn.Module):
     """Head for emotion classification task."""
 
-    def __init__(self, config):
+    def __init__(self, hidden_size: int, dropout: float, num_labels: int):
         super().__init__()
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
+        self.dense = nn.Linear(hidden_size, hidden_size)
+        self.dropout = nn.Dropout(dropout)
+        self.out_proj = nn.Linear(hidden_size, num_labels)
 
     def forward(self, features, **kwargs):
         x = features[:, 0, :]
@@ -35,13 +35,15 @@ class RobertaEmpathModel(nn.Module):
     def __init__(
         self,
         base_model: PreTrainedModel,
-        config: PretrainedConfig,
         n_classes: int,
     ):
         super().__init__()
-        config["num_labels"] = n_classes
         self.roberta = base_model
-        self.classifier = EmapthyClassificationHead(config)
+        self.classifier = EmotionClassificationHead(
+            hidden_size=base_model.config.hidden_size,
+            dropout=base_model.config.hidden_dropout_prob,
+            num_labels=n_classes,
+        )
         pass
 
     def forward(
