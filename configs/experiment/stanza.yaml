@@ -30,7 +30,7 @@ trainer:
   num_sanity_val_steps: 0
 
 model:
-  _target_: src.models.poet_lightning.PoetLightningModel
+  _target_: poetry_generation.models.poet_lightning.PoetLightningModel
   lr: 0.0001
   warmup_steps: 0
   vocab_size: ???
@@ -38,7 +38,7 @@ model:
   pretrained_name_or_path: "dkleczek/papuGaPT2"
 
 datamodule:
-  _target_: src.datamodules.stanza_datamodule.StanzaDataModule
+  _target_: poetry_generation.datamodules.stanza_datamodule.StanzaDataModule
 
   res_dir: ${res_dir} # data_dir is specified in config.yaml
   batch_size: 2

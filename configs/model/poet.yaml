@@ -1,4 +1,4 @@
-_target_: src.models.poet_lightning.PoetLightningModel # Change it later
+_target_: poetry_generation.models.poet_lightning.PoetLightningModel
 
 lr: 0.0001
 vocab_size: ???

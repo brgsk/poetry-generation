@@ -1,0 +1,5 @@
+outs:
+- md5: 723c0d91cee453f74c04ed8062a7a867.dir
+  size: 405780944
+  nfiles: 2
+  path: base-vanilla

@@ -1,4 +1,4 @@
-_target_: src.datamodules.stanza_datamodule.StanzaDataModule
+_target_: poetry_generation.datamodules.stanza_datamodule.StanzaDataModule
 
 res_dir: ${res_dir} # data_dir is specified in config.yaml
 batch_size: 32
