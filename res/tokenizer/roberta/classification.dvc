@@ -1,0 +1,5 @@
+outs:
+- md5: 178a73d1d49064838d3aac9b6c4c313c.dir
+  size: 1446931
+  nfiles: 6
+  path: classification

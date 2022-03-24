@@ -1,0 +1,5 @@
+outs:
+- md5: f40a92bb29bc064aa977ae535a027be4.dir
+  size: 1536944
+  nfiles: 6
+  path: generation
