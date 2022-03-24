@@ -10,7 +10,9 @@ class EmotionDataModule(LightningDataModule):
     Lightning Datamodule implementation for storing data as EmotionDatasets.
     """
 
-    def __init__(self, train_path: str, val_path: str, test_path: str, batch_size: int) -> None:
+    def __init__(
+        self, train_path: str, val_path: str, test_path: str, batch_size: int, pin_memory: bool
+    ) -> None:
         super().__init__()
         self.save_hyperparameters(logger=False)
 
@@ -29,4 +31,5 @@ class EmotionDataModule(LightningDataModule):
             batch_size=self.hparams.batch_size,
             shuffle=shuffle,
             collate_fn=TokenizerCollator(),
+            pin_memory=self.hparams.pin_memory,
         )

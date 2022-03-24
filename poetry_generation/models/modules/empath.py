@@ -6,7 +6,7 @@ from poetry_generation.models.modules.emotion_classification_head import (
 )
 
 
-class RobertaEmpathModel(nn.Module):
+class EmpathModel(nn.Module):
     def __init__(
         self,
         model_name_or_path: PreTrainedModel,

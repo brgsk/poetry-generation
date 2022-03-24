@@ -20,17 +20,19 @@ This repository contains code for training poetry generation model and training 
 
 Install dependencies
 
-```yaml
+```apache
 poetry install
 ```
 
 Download data
 
-    dvc pull
+```apache
+dvc pull
+```
 
 Train model with default configuration
 
-```yaml
+```apache
 # train on CPU
 python run.py trainer.gpus=0
 
@@ -40,13 +42,13 @@ python run.py trainer.gpus=1
 
 Train model with chosen experiment configuration from [configs/experiment/](configs/experiment/)
 
-```yaml
+```apache
 python run.py experiment=experiment_name
 ```
 
 You can override any parameter from command line like this
 
-```yaml
+```apache
 python run.py trainer.max_epochs=20 datamodule.batch_size=64
 ```
 

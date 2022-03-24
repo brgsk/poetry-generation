@@ -1,0 +1,11 @@
+# @package _global_
+
+defaults:
+  - override /mode: exp.yaml
+  - override /trainer: default.yaml
+  - override /model: empath.yaml
+  - override /datamodule: emotion.yaml
+  - override /callbacks: default.yaml
+  - override /logger: mlflow
+
+name: "emotion"

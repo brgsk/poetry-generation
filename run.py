@@ -1,7 +1,8 @@
 import hydra
 from omegaconf import DictConfig
-from src.train import train
-from src.utils import utils
+
+from poetry_generation.train import train
+from poetry_generation.utils import utils
 
 # # load environment variables from `.env` file if it exists
 # # recursively searches for `.env` in all folders starting from work dir

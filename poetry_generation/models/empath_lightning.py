@@ -2,7 +2,7 @@ from typing import Any
 
 import pytorch_lightning as pl
 
-from poetry_generation.models.modules.emotion_classifier import RobertaEmpathModel
+from poetry_generation.models.modules.emotion_classifier import EmpathModel
 
 
 class EmpathLightningModel(pl.LightningModule):
@@ -16,7 +16,7 @@ class EmpathLightningModel(pl.LightningModule):
         super().__init__()
 
         self.save_hyperparameters(logger=False)
-        self.model = RobertaEmpathModel(model_name_or_path=model_name_or_path, n_classes=n_classes)
+        self.model = EmpathModel(model_name_or_path=model_name_or_path, n_classes=n_classes)
 
     def step(self, batch: Any):
         pass

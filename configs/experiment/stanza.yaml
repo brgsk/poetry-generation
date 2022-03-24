@@ -8,7 +8,7 @@ defaults:
   - override /trainer: null
   - override /model: null
   - override /datamodule: null
-  - override /logger: null
+  - override /logger: mlflow
 
 # all parameters below will be merged with parameters from default configurations set above
 # this allows you to overwrite only specified parameters
