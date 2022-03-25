@@ -1,3 +1,5 @@
+from typing import Any
+
 import pandas as pd
 from torch.utils.data import Dataset
 
@@ -13,8 +15,8 @@ class EmotionDataset(Dataset):
 
         self.df = df[[self.data_column, self.class_column]]
 
-    def __getitem__(self, idx) -> tuple(str, int):
-        return (self.df.loc[idx, self.data_column], self.df.loc[idx, self.class_column])
+    def __getitem__(self, idx) -> Any:
+        return self.df.loc[idx, self.data_column], self.df.loc[idx, self.class_column]
 
     def __len__(self) -> int:
         return self.df.shape[0]

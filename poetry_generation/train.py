@@ -1,4 +1,3 @@
-from pathlib import Path
 from typing import List, Optional
 
 import hydra
@@ -11,7 +10,6 @@ from pytorch_lightning import (
     seed_everything,
 )
 from pytorch_lightning.loggers import LightningLoggerBase
-from transformers import GPT2Tokenizer
 
 from poetry_generation.utils import utils
 
@@ -33,21 +31,12 @@ def train(config: DictConfig) -> Optional[float]:
     if config.get("seed"):
         seed_everything(config.seed, workers=True)
 
-    res_dir = Path(config.res_dir)
-
-    if not (res_dir / "tokenizer").exists():
-        utils.prepare_tokenizer(
-            tokenizer_hf_name=config.model.pretrained_name_or_path, save_dir=config.res_dir
-        )
-        tokenizer = GPT2Tokenizer.from_pretrained(res_dir / "tokenizer")
-    else:
-        tokenizer = GPT2Tokenizer.from_pretrained(res_dir / "tokenizer")
-
-    config.model.vocab_size = len(tokenizer)
-
     # Init lightning datamodule
     log.info(f"Instantiating datamodule <{config.datamodule._target_}>")
     datamodule: LightningDataModule = hydra.utils.instantiate(config.datamodule)
+
+    if config.name == "stanza" or "vocab_size" in config.model.keys():
+        config.model.vocab_size = len(datamodule.tokenizer)
 
     # Init lightning model
     log.info(f"Instantiating model <{config.model._target_}>")

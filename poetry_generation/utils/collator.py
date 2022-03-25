@@ -1,17 +1,22 @@
 from typing import Any
 
 import torch
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, BatchEncoding
 
 
-class TokenizerCollator:
-    def __init__(self, tokenizer_path: str, max_length: int = 512) -> None:
+class TokenCollator:
+    def __init__(self, tokenizer_path: str) -> None:
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
 
-    def __call__(self, batch: Any) -> Any:
-        encoded = self.tokenizer([x[0] for x in batch])
-        input_ids = torch.as_tensor([enc.input_ids for enc in encoded])
-        attention_mask = torch.as_tensor([enc.attention_mask for enc in encoded])
-        labels = torch.as_tensor([x[1] for x in batch])
+    def __call__(self, batch: Any) -> BatchEncoding:
+        max_sentence_len = max(len(sent) for sent in batch[0])
+        encoded = self.tokenizer(
+            [x for x in batch[0]],
+            padding="max_length",
+            max_length=max_sentence_len if max_sentence_len < 512 else 512,
+            truncation=True,
+            return_tensors="pt",
+        )
+        labels = torch.as_tensor([x for x in batch[1]])
 
-        return (input_ids, attention_mask), labels
+        return encoded, labels

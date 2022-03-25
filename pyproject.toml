@@ -24,6 +24,7 @@ sentencepiece = "^0.1.96"
 autoflake = "^1.4"
 nltk = "^3.7"
 textblob = "^0.17.1"
+torchmetrics = "^0.7.3"
 
 [tool.poetry.dependencies.transformers]
 git = 'ssh://git@gitlab.4soft.tech/nlp-research/transformers.git'

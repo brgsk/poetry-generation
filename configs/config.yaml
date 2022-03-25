@@ -22,9 +22,10 @@ defaults:
 # so it's useful to have this path as a special variable
 # https://hydra.cc/docs/next/tutorials/basic/running_your_app/working_directory
 work_dir: ${hydra:runtime.cwd}
+res_dir: ${work_dir}/res
 
 # path to folder with data
-res_dir: ${work_dir}/res
+data_dir: ${res_dir}/data
 
 # pretty print config at the start of the run using Rich library
 print_config: True

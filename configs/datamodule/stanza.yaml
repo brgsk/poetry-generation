@@ -1,7 +1,9 @@
 _target_: poetry_generation.datamodules.stanza_datamodule.StanzaDataModule
 
-res_dir: ${res_dir} # data_dir is specified in config.yaml
-batch_size: 32
+# res_dir: ${res_dir} # res_dir is specified in config.yaml
+tokenizer_path: ${res_dir}/tokenizer/gpt2/generation
+data_path: ${data_dir}/stanzas.csv
+batch_size: 12
 train_val_ratio: 0.8
 num_workers: 4
 pin_memory: True

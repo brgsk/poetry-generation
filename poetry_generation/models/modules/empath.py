@@ -10,15 +10,17 @@ class EmpathModel(nn.Module):
     def __init__(
         self,
         model_name_or_path: PreTrainedModel,
-        n_classes: int = 3,
+        num_labels: int = 3,
     ):
         super().__init__()
         self.roberta = AutoModel.from_pretrained(model_name_or_path)
         self.classifier = EmotionClassificationHead(
             hidden_size=self.roberta.config.hidden_size,
             dropout=self.roberta.config.hidden_dropout_prob,
-            num_labels=n_classes,
+            num_labels=num_labels,
         )
+
+        self.num_labels = num_labels
 
     def forward(
         self,

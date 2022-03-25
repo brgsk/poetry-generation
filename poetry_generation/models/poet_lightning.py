@@ -1,4 +1,3 @@
-from functools import lru_cache
 from typing import Any
 
 from pytorch_lightning import LightningModule
@@ -13,11 +12,11 @@ class PoetLightningModel(LightningModule):
 
     def __init__(
         self,
-        warmup_steps: int,
+        lr: float,
         vocab_size: int,
         n_positions: int,
+        warmup_steps: int,
         pretrained_name_or_path: str,
-        lr: float = 1e-4,
     ) -> None:
         super().__init__()
 
@@ -48,11 +47,13 @@ class PoetLightningModel(LightningModule):
         loss = self.step(batch)
 
         self.log("train/loss", loss.item(), on_step=False, on_epoch=True)
+        return {"loss": loss}
 
     def validation_step(self, batch: Any, batch_idx: int) -> dict:
         loss = self.step(batch)
 
         self.log("val/loss", loss.item(), on_step=False, on_epoch=True)
+        return {"loss": loss}
 
     def configure_optimizers(self) -> Optimizer:
         optimizer = AdamW(params=self.model.parameters(), lr=self.hparams.lr)
@@ -65,7 +66,7 @@ class PoetLightningModel(LightningModule):
         scheduler_config = {"scheduler": scheduler, "interval": "step", "frequency": 1}
         return {"optimizer": optimizer, "lr_scheduler": scheduler_config}
 
-    @lru_cache
+    # @lru_cache
     @property
     def num_training_steps(self) -> int:
         """Total training steps inferred from datamodule and devices."""

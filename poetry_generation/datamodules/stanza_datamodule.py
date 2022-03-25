@@ -1,4 +1,3 @@
-from pathlib import Path
 from typing import Optional
 
 import pandas as pd
@@ -17,7 +16,8 @@ class StanzaDataModule(LightningDataModule):
 
     def __init__(
         self,
-        res_dir: str = "res/",
+        data_path: str,
+        tokenizer_path: str,
         batch_size: int = 32,
         train_val_ratio: float = 0.8,
         num_workers: int = 4,
@@ -25,16 +25,14 @@ class StanzaDataModule(LightningDataModule):
     ) -> None:
         super().__init__()
 
-        tokenizer_dir = Path(res_dir, "tokenizer")
-        self.tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_dir)
-
         # this line allows to access init params with 'self.hparams' attribute
         # it also ensures init params will be stored in ckpt
         self.save_hyperparameters(logger=False)
 
-    def setup(self, stage: Optional[str] = None) -> None:
+        self.tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_path)
 
-        stanza_df = pd.read_csv(Path(self.hparams.res_dir) / "data" / "stanzas.csv")
+    def setup(self, stage: Optional[str] = None) -> None:
+        stanza_df = pd.read_csv(self.hparams.data_path)
         stanza_df = stanza_df.fillna("")
 
         stanza_ds = StanzaDataset(data_df=stanza_df, tokenizer=self.tokenizer)
