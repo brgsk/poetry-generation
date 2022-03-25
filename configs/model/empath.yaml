@@ -1,6 +1,6 @@
-_target_: src.models.empath_lightning.EmpathLightningModel
+_target_: poetry_generation.models.empath_lightning.EmpathLightningModel
 
-res_dir: ${res_dir}
-lr: 0.0001
+lr: 0.00001
 warmup_steps: 0
 model_name_or_path: ${res_dir}/model/roberta/base-vanilla
+n_classes: 3

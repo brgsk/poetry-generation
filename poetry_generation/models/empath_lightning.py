@@ -20,7 +20,7 @@ class EmpathLightningModel(pl.LightningModule):
         super().__init__()
 
         self.save_hyperparameters(logger=False)
-        self.model = EmpathModel(model_name_or_path=model_name_or_path, n_classes=n_classes)
+        self.model = EmpathModel(model_name_or_path=model_name_or_path, num_labels=n_classes)
 
         self.train_acc = Accuracy()
         self.val_acc = Accuracy()
@@ -31,7 +31,7 @@ class EmpathLightningModel(pl.LightningModule):
 
     def step(self, batch: BatchEncoding):
         encodings, targets = batch
-        loss, logits = self.model(**encodings)
+        loss, logits = self.model(**encodings, labels=targets)
         return loss, logits, targets
 
     def training_step(self, batch: BatchEncoding):
@@ -50,7 +50,7 @@ class EmpathLightningModel(pl.LightningModule):
         # `outputs` is a list of dicts returned from `training_step()`
         pass
 
-    def validation_step(self, batch: BatchEncoding):
+    def validation_step(self, batch: BatchEncoding, batch_idx: int):
         loss, logits, targets = self.step(batch)
         preds = logits.argmax(-1)
 
@@ -70,7 +70,7 @@ class EmpathLightningModel(pl.LightningModule):
         self.val_acc_best.update(acc)
         self.log("val/acc_best", self.val_acc_best.compute(), on_epoch=True, prog_bar=True)
 
-    def test_step(self, batch: Any):
+    def test_step(self, batch: Any, batch_idx: int):
         loss, logits, targets = self.step(batch)
         preds = logits.argmax(-1)
 

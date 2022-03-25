@@ -9,5 +9,3 @@ defaults:
   - override /logger: mlflow
 
 name: "emotion"
-
-data_dir: ${data_dir}/emotions

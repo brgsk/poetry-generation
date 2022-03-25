@@ -1,3 +1,4 @@
+import os
 from typing import List, Optional
 
 import hydra
@@ -55,6 +56,8 @@ def train(config: DictConfig) -> Optional[float]:
     if "logger" in config:
         for _, lg_conf in config.logger.items():
             if "_target_" in lg_conf:
+                if "tracking_uri" in lg_conf.keys():
+                    lg_conf["tracking_uri"] = os.getenv("LOGGER_TRACKING_URI")
                 log.info(f"Instantiating logger <{lg_conf._target_}>")
                 logger.append(hydra.utils.instantiate(lg_conf))
 
@@ -63,6 +66,11 @@ def train(config: DictConfig) -> Optional[float]:
     trainer: Trainer = hydra.utils.instantiate(
         config.trainer, callbacks=callbacks, logger=logger, _convert_="partial"
     )
+
+    # Tune hyperparameters
+    if trainer.auto_lr_find or trainer.auto_scale_batch_size:
+        log.info("Finding optimal learning rate and batch size!")
+        trainer.tune(model, datamodule)
 
     # Send some parameters from config to all lightning loggers
     log.info("Logging hyperparameters!")

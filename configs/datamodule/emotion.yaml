@@ -1,11 +1,9 @@
-_target_: poetry_generation.datamodules.emotion_datamodule.EmotionDatamodule
+_target_: poetry_generation.datamodules.emotion_datamodule.EmotionDataModule
 
-res_dir: ${res_dir}
 tokenizer_path: ${res_dir}/tokenizer/roberta/classification
-data_dir: ${data_dir}/cortex
-train_path: ${data_dir}/train-emotion.tsv
-val_path: ${data_dir}/val-emotion.tsv
-test_path: ${data_dir}/test-emotion.tsv
+train_file: ${data_dir}/emotions/cortex/train-emotion.tsv
+val_file: ${data_dir}/emotions/cortex/val-emotion.tsv
+test_file: ${data_dir}/emotions/cortex/test-emotion.tsv
 batch_size: 12
 num_workers: 4
 pin_memory: True

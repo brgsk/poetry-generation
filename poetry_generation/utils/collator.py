@@ -9,14 +9,14 @@ class TokenCollator:
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
 
     def __call__(self, batch: Any) -> BatchEncoding:
-        max_sentence_len = max(len(sent) for sent in batch[0])
+        max_sentence_len = max(len(sent[0]) for sent in batch)
         encoded = self.tokenizer(
-            [x for x in batch[0]],
+            [x[0] for x in batch],
             padding="max_length",
-            max_length=max_sentence_len if max_sentence_len < 512 else 512,
+            max_length=max_sentence_len if max_sentence_len <= 512 else 512,
             truncation=True,
             return_tensors="pt",
         )
-        labels = torch.as_tensor([x for x in batch[1]])
+        labels = torch.as_tensor([x[1] for x in batch])
 
         return encoded, labels

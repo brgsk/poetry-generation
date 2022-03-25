@@ -15,9 +15,7 @@ mlflow = "^1.24.0"
 logzero = "^1.7.0"
 rich = "^11.2.0"
 hydra-core = "^1.1.1"
-boto3 = "^1.21.14"
 pytorch-lightning = "^1.5.10"
-dvc = "^2.9.5"
 bs4 = "^0.0.1"
 hydra-colorlog = "^1.1.0"
 sentencepiece = "^0.1.96"
@@ -25,10 +23,16 @@ autoflake = "^1.4"
 nltk = "^3.7"
 textblob = "^0.17.1"
 torchmetrics = "^0.7.3"
+s3 = "^3.0.0"
+dvc = "^2.9.5"
+python-dotenv = "^0.20.0"
 
 [tool.poetry.dependencies.transformers]
 git = 'ssh://git@gitlab.4soft.tech/nlp-research/transformers.git'
 extras = ['iambot', 'tokenizers', 'pytorch']
+
+[tool.poetry.group.dev.dependencies]
+dotenv-python = "^0.0.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"

@@ -9,5 +9,3 @@ defaults:
   - override /logger: mlflow
 
 name: "stanza"
-
-data_dir: ${data_dir}/poems
