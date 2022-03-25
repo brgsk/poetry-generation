@@ -1,0 +1,4 @@
+outs:
+- md5: 5acaf94135709f24fa929618d5eafc58
+  size: 3746455
+  path: train-emotion.tsv
