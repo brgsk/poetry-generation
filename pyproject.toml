@@ -31,9 +31,6 @@ python-dotenv = "^0.20.0"
 git = 'ssh://git@gitlab.4soft.tech/nlp-research/transformers.git'
 extras = ['iambot', 'tokenizers', 'pytorch']
 
-[tool.poetry.group.dev.dependencies]
-dotenv-python = "^0.0.1"
-
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
 mypy = "^0.931"
