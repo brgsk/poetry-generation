@@ -1,0 +1,13 @@
+_target_: pytorch_lightning.Trainer
+
+gpus: 1
+
+min_epochs: 1
+max_epochs: 10
+
+progress_bar_refresh_rate: 5
+resume_from_checkpoint: null
+weights_summary: "full"
+num_sanity_val_steps: 0
+auto_lr_find: True
+auto_scale_batch_size: None # can be `binsearch` or `power`
